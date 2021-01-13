@@ -19,21 +19,8 @@ class LinebotController < ApplicationController
         when Line::Bot::Event::MessageType::Text
           case event.message['text']
           when /.*(会議|かいぎ).*/
-            uri = URI.parse(ENV['MEETING_URL'])
-            http = Net::HTTP.new(uri.host, uri.port)
-            http.use_ssl = true
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-            request = Net::HTTP::Post.new(uri.path)
-            request['Authorization'] = "Bearer #{ENV['JWT']}"
-            bearer = "Bearer #{ENV['JWT']}"
-            request['Content-Type'] = 'application/json'
-                request.body = {
-                    "type":1,
-                }.to_json
-            response = http.request(request)
-            starturl = JSON.parse(response.body)
-            url = starturl['start_url'].slice(0..102)
-            content = "コレが参加URLです : #{url}"
+            @meeting_url = ExecutionZoomApi.new.execution_zoom_api
+            content = "ミーティング開始URL : #{@meeting_url['start_url'].slice(0..102)}"
           when /.*(あいうえお).*/
             content = "あいうえお#{url}"
           when /.*(かきくけこ).*/
@@ -59,5 +46,23 @@ class LinebotController < ApplicationController
     end
 
     head :ok
+  end
+end
+
+class ExecutionZoomApi
+  def execution_zoom_api
+    uri = URI.parse(ENV['MEETING_URL'])
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Post.new(uri.path)
+    request['Authorization'] = "Bearer #{ENV['JWT']}"
+    bearer = "Bearer #{ENV['JWT']}"
+    request['Content-Type'] = 'application/json'
+    request.body = {
+                    "type":1,
+                }.to_json
+    response = http.request(request)
+    url = JSON.parse(response.body)
   end
 end
