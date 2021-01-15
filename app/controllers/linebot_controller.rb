@@ -29,9 +29,9 @@ class LinebotController < ApplicationController
             content = '違う'
           end
           message = {
-              type: 'message',
+              type: 'text',
               label:"Yes",
-              text: content
+              text: "Yes"
             }
         client.reply_message(event['replyToken'], message)
         # テキスト形式以外の場合
