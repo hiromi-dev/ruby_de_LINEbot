@@ -56,7 +56,7 @@ class LinebotController < ApplicationController
               ]
             }
           }
-          client.reply_message(event['replyToken'], selectdate)
+          client.reply_message(event['replyToken'], @selectdate)
           show_date
         end
       end
