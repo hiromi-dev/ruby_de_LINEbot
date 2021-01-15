@@ -22,7 +22,6 @@ class LinebotController < ApplicationController
             @meeting_url = ExecutionZoomApi.new.execution_zoom_api
             content = "ミーティング開始URL : #{@meeting_url['start_url'].slice(0..102)}"
           when /.*(選択).*/
-            client.reply_message(event['replyToken'], selectdate)
           when /.*(かきくけこ).*/
             content = 'かきくけこ'
           else
@@ -35,7 +34,7 @@ class LinebotController < ApplicationController
         client.reply_message(event['replyToken'], message)
         # テキスト形式以外の場合
         when Line::Bot::Event::MessageType::Sticker
-          selectdate = {
+          @selectdate = {
             type: "template",
             altText: "this is a buttons template",
             template: {
@@ -58,11 +57,20 @@ class LinebotController < ApplicationController
             }
           }
           client.reply_message(event['replyToken'], selectdate)
+          show_date
         end
       end
     end
 
     head :ok
+  end
+
+  def show_date
+    message = {
+              type: 'text',
+              text: postback.params.datetime
+            }
+    client.reply_message(event['replyToken'], message)
   end
 end
 
