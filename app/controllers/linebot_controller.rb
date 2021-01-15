@@ -30,16 +30,32 @@ class LinebotController < ApplicationController
           end
           message = {
               type: 'text',
-              label:"Yes",
-              text: "Yes"
+              text: content
             }
         client.reply_message(event['replyToken'], message)
         # テキスト形式以外の場合
         when Line::Bot::Event::MessageType::Sticker
           message = {
-            type: 'sticker',
-            packageId: '11537',
-            stickerId: '52002740'
+            type: "template",
+            altText: "this is a buttons template",
+            template: {
+              type: "buttons",
+              title: "空いてる日程教えてよ",
+              text: "Please select",
+              actions: [
+                {
+                  type: "datetimepicker",
+                  label: "いいよ",
+                  mode: "date",
+                  data: "action=datetemp&selectId=1"
+                },
+                {
+                  type: "postback",
+                  label: "やっぱりやめたい",
+                  data: "action=cancel&selectId=2"
+                },
+              ]
+            }
           }
           client.reply_message(event['replyToken'], message)
         end
