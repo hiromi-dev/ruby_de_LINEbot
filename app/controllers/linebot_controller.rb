@@ -22,14 +22,15 @@ class LinebotController < ApplicationController
             @meeting_url = ExecutionZoomApi.new.execution_zoom_api
             content = "ミーティング開始URL : #{@meeting_url['start_url'].slice(0..102)}"
           when /.*(あいうえお).*/
-            content = "あいうえお#{url}"
+            content = "あいうえお"
           when /.*(かきくけこ).*/
             content = 'かきくけこ'
           else
             content = '違う'
           end
           message = {
-              type: 'text',
+              type: 'message',
+              label:"Yes",
               text: content
             }
         client.reply_message(event['replyToken'], message)
