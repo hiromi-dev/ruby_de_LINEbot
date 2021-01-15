@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'dotenv/load'
+require 'pry'
 
 class LinebotController < ApplicationController
   # callbackアクションのCSRFトークン認証を無効
@@ -68,7 +69,7 @@ class LinebotController < ApplicationController
   def show_date
     message = {
               type: 'text',
-              text: postback.params.datetime
+              text: "hello"
             }
     client.reply_message(event['replyToken'], message)
   end
