@@ -3,6 +3,7 @@ require 'net/https'
 require 'net/http'
 require 'uri'
 require 'json'
+require 'jwt'
 
 class ExecutionZoomApi
 

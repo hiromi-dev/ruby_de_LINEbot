@@ -14,6 +14,8 @@ gem 'turbolinks', '~> 5'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'line-bot-api'
 gem 'dotenv'
+gem 'jwt'
+
 
 group :development, :test do
   gem 'pry-rails'
