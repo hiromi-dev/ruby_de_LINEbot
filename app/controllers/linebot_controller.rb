@@ -2,6 +2,8 @@
 require 'dotenv/load'
 require 'pry'
 
+require_relative 'get_zoom_meeting_url.rb'
+
 class LinebotController < ApplicationController
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery except: [:callback]
@@ -23,7 +25,7 @@ class LinebotController < ApplicationController
         when Line::Bot::Event::MessageType::Text
           case event.message['text']
           when /.*(会議|かいぎ).*/
-            @meeting_url = ExecutionZoomApi.new.execution_zoom_api
+            @meeting_url = ExecutionZoomApi.new.get_zoom_meeting_url
             content = "ミーティング開始URLを作成しました。 : #{@meeting_url['start_url'].slice(0..102)}"
             message = {
               type: 'text',
@@ -96,22 +98,4 @@ class LinebotController < ApplicationController
     head :ok
   end
 
-end
-
-class ExecutionZoomApi
-  def execution_zoom_api
-    uri = URI.parse(ENV['MEETING_URL'])
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    request = Net::HTTP::Post.new(uri.path)
-    request['Authorization'] = "Bearer #{ENV['JWT']}"
-    bearer = "Bearer #{ENV['JWT']}"
-    request['Content-Type'] = 'application/json'
-    request.body = {
-                    "type":1,
-                }.to_json
-    response = http.request(request)
-    url = JSON.parse(response.body)
-  end
 end
