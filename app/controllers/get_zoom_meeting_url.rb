@@ -1,3 +1,4 @@
+require 'dotenv/load'
 require 'net/https'
 require 'net/http'
 require 'uri'
@@ -40,7 +41,7 @@ class ExecutionZoomApi
     @user_id=self.get_user_data(@jwt)
     @meeting_url = "https://api.zoom.us/v2/users/#{@user_id}/meetings"
 
-    uri = URI.parse(ENV['MEETING_URL'])
+    uri = URI.parse(@meeting_url)
     http = Net::HTTP.new(uri.host, uri.port)
 
     http.use_ssl = true

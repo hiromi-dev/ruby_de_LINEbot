@@ -16,8 +16,10 @@ gem 'line-bot-api'
 gem 'dotenv'
 
 group :development, :test do
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'rubocop', '~> 1.7', require: false
+  gem 'pry-rails'
+  gem 'pry', '~> 0.13.1'
+  gem 'byebug', '~> 11.1', '>= 11.1.3'
+  gem 'pry-byebug', '~> 3.4'
 end
 
 group :development do
